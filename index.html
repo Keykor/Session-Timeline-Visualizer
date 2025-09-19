@@ -1217,9 +1217,8 @@
         }
 
         function createSequenceDiagram(actions, sessionStart, sessionEnd) {
-            // Limpiar diagrama anterior y tooltips
+            // Limpiar diagrama anterior
             d3.select('#sequenceDiagram').selectAll('*').remove();
-            d3.selectAll('.custom-tooltip').remove();
 
             // Definir secuencia de páginas según el modo
             const isV2Mode = document.getElementById('modeSwitch').checked;
@@ -1294,9 +1293,9 @@
             const g = svg.append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
-            // Crear tooltip
+            // Crear tooltip específico para sequence diagram
             const tooltip = d3.select('body').append('div')
-                .attr('class', 'custom-tooltip')
+                .attr('class', 'custom-tooltip sequence-tooltip')
                 .style('opacity', 0);
 
             // Dibujar columnas de páginas (verticales que van hacia abajo)
