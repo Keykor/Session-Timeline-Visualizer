@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V1 Session Timeline Visualizer</title>
+    <title>Session Timeline Visualizer</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         body {
@@ -18,6 +18,8 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow-x: hidden;
+            box-sizing: border-box;
         }
         #timelineSection h3 {
             margin-bottom: 15px;
@@ -317,6 +319,79 @@
             border-radius: 4px;
             margin: 10px 0;
         }
+        /* Sequence Diagram Styles */
+        #sequenceDiagram {
+            margin: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow-x: auto !important;
+            overflow-y: visible;
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            box-sizing: border-box;
+        }
+        #sequenceDiagram svg {
+            min-width: fit-content;
+            display: block;
+            margin: 0 auto;
+        }
+        #sequenceDiagram::-webkit-scrollbar {
+            height: 12px;
+        }
+        #sequenceDiagram::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 6px;
+        }
+        #sequenceDiagram::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 6px;
+        }
+        #sequenceDiagram::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        .sequence-column {
+            stroke: #666;
+            stroke-width: 2;
+            stroke-dasharray: 5,5;
+        }
+        .sequence-column-label {
+            font-size: 14px;
+            font-weight: bold;
+            fill: #333;
+            text-anchor: middle;
+            font-family: Arial, sans-serif;
+        }
+        .sequence-arrow {
+            stroke: #e74c3c;
+            stroke-width: 2;
+            fill: #e74c3c;
+            cursor: pointer;
+        }
+        .sequence-arrow:hover {
+            stroke: #c0392b;
+            fill: #c0392b;
+            stroke-width: 3;
+        }
+        .sequence-step-number {
+            font-size: 12px;
+            fill: white;
+            font-weight: bold;
+            text-anchor: middle;
+            font-family: Arial, sans-serif;
+        }
+        .sequence-step-circle {
+            fill: #3498db;
+            stroke: #2980b9;
+            stroke-width: 2;
+            cursor: pointer;
+        }
+        .sequence-step-circle:hover {
+            fill: #2980b9;
+        }
     </style>
 </head>
 <body>
@@ -324,7 +399,7 @@
         <div class="header-section">
             <div class="title-and-selector">
                 <div class="title-with-switch">
-                    <h1>V1 Session Timeline Visualizer</h1>
+                    <h1>📈 V1 User Journey Analytics Dashboard</h1>
                     <div class="mode-switch">
                         <div class="mode-labels">
                             <span class="v1">V1</span>
@@ -344,18 +419,30 @@
         </div>
 
         <div id="sessionInfo" class="session-info" style="display: none;">
-            <h3>Session Information</h3>
+            <h3>📋 Session Overview & Metrics</h3>
             <div id="sessionDetails"></div>
         </div>
 
+        <div id="sequenceSection" style="display: none;">
+            <h3>📊 User Navigation Flow - Page Sequence Analysis</h3>
+            <p style="color: #6c757d; margin-bottom: 15px; font-size: 14px;">
+                Visual representation of how users navigate between pages over time.
+                <strong>Red arrows:</strong> Forward navigation | <strong>Yellow dashed:</strong> Back navigation
+            </p>
+            <div id="sequenceDiagram"></div>
+        </div>
+
         <div id="timelineSection" style="display: none;">
-            <h3>Timeline</h3>
+            <h3>⏱️ User Actions Timeline - Detailed Activity View</h3>
+            <p style="color: #6c757d; margin-bottom: 15px; font-size: 14px;">
+                Chronological timeline showing all user interactions and page transitions with duration and timing details.
+            </p>
             <div id="timeline"></div>
         </div>
 
         <div id="legendBox" class="legend-box" style="display: none;">
             <div class="legend-header" onclick="toggleLegend()">
-                <span>Action Legend</span>
+                <span>🎨 Action Color Legend - What Each Color Means</span>
                 <span class="legend-toggle collapsed">▼</span>
             </div>
             <div id="legendContent" class="legend-content collapsed">
@@ -364,15 +451,18 @@
         </div>
 
         <div id="actionsTable" style="display: none;">
-            <h3>Action Details (times relative to session start)</h3>
+            <h3>📊 Detailed Action Log - Complete User Journey Breakdown</h3>
+            <p style="color: #6c757d; margin-bottom: 15px; font-size: 14px;">
+                Complete chronological log of all user actions with precise timing and duration metrics.
+            </p>
             <table class="actions-table">
                 <thead>
                     <tr>
-                        <th>Action</th>
-                        <th>Page</th>
-                        <th>Start (s)</th>
-                        <th>End (s)</th>
-                        <th>Duration (s)</th>
+                        <th>🎯 Action Type</th>
+                        <th>📄 Page Location</th>
+                        <th>▶️ Start Time (s)</th>
+                        <th>⏹️ End Time (s)</th>
+                        <th>⏱️ Duration (s)</th>
                     </tr>
                 </thead>
                 <tbody id="actionsTableBody">
@@ -788,6 +878,7 @@
 
                 document.getElementById('sessionInfo').style.display = 'block';
                 document.getElementById('timelineSection').style.display = 'block';
+                document.getElementById('sequenceSection').style.display = 'block';
                 document.getElementById('legendBox').style.display = 'block';
                 document.getElementById('actionsTable').style.display = 'block';
                 document.getElementById('errorMessage').style.display = 'none';
@@ -796,14 +887,15 @@
                 const sessionDetails = document.getElementById('sessionDetails');
                 const durationSeconds = (sessionDuration / 1000).toFixed(2);
                 sessionDetails.innerHTML = `
-                    <p><strong>UUID:</strong> ${sessionData.uuid || 'N/A'}</p>
-                    <p><strong>Version:</strong> ${sessionData.version || 'N/A'}</p>
-                    <p><strong>Total duration:</strong> ${durationSeconds} seconds</p>
-                    <p><strong>Actions found:</strong> ${actions.length}</p>
+                    <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+                        <div><strong>🆔 Session ID:</strong> ${sessionData.uuid || 'N/A'}</div>
+                        <div><strong>⏱️ Total Session Time:</strong> ${durationSeconds}s</div>
+                    </div>
                 `;
 
                 // Crear timeline con D3.js
                 createD3Timeline(actions, sessionStart, sessionEnd, sessionDuration);
+                createSequenceDiagram(actions, sessionStart, sessionEnd);
                 createLegend(actions);
                 createActionsTable(actions, sessionStart);
 
@@ -1124,6 +1216,251 @@
             });
         }
 
+        function createSequenceDiagram(actions, sessionStart, sessionEnd) {
+            // Limpiar diagrama anterior y tooltips
+            d3.select('#sequenceDiagram').selectAll('*').remove();
+            d3.selectAll('.custom-tooltip').remove();
+
+            // Definir secuencia de páginas según el modo
+            const isV2Mode = document.getElementById('modeSwitch').checked;
+            const pageSequence = isV2Mode
+                ? ['/v2', '/options', '/filtered_options', '/summary']
+                : ['/v1', '/theatre', '/date', '/show', '/seat', '/summary'];
+
+            // Filtrar solo las páginas que realmente aparecen en las acciones
+            const pagesInSession = [...new Set(actions.map(action => action.page))];
+            const filteredSequence = pageSequence.filter(page => pagesInSession.includes(page));
+
+            if (filteredSequence.length === 0) return;
+
+            // Crear secuencia de transiciones entre páginas (no todas las acciones)
+            const pageTransitions = [];
+            let currentPage = null;
+            let transitionCounter = 1;
+
+            // Ordenar acciones por tiempo y agrupar por transiciones de página
+            const sortedActions = [...actions].sort((a, b) => a.startTime - b.startTime);
+
+            sortedActions.forEach(action => {
+                if (action.page !== currentPage) {
+                    if (currentPage !== null) {
+                        // Hay una transición de página
+                        pageTransitions.push({
+                            fromPage: currentPage,
+                            toPage: action.page,
+                            fromIndex: filteredSequence.indexOf(currentPage),
+                            toIndex: filteredSequence.indexOf(action.page),
+                            transitionNumber: transitionCounter++,
+                            time: action.startTime
+                        });
+                    } else {
+                        // Primera página
+                        pageTransitions.push({
+                            fromPage: null,
+                            toPage: action.page,
+                            fromIndex: -1,
+                            toIndex: filteredSequence.indexOf(action.page),
+                            transitionNumber: transitionCounter++,
+                            time: action.startTime
+                        });
+                    }
+                    currentPage = action.page;
+                }
+            });
+
+            // Calcular dimensiones: X fijo con scroll, Y dinámico hacia abajo
+            const margin = { top: 80, right: 80, bottom: 80, left: 80 };
+            const columnWidth = 150;
+            const stepHeight = 40;
+            const realTransitionsCount = pageTransitions.filter(t => t.fromIndex !== -1).length;
+            const totalWidth = filteredSequence.length * columnWidth + margin.left + margin.right;
+            const totalHeight = realTransitionsCount * stepHeight + margin.top + margin.bottom + 80;
+
+            // Crear SVG que FORCE el scroll horizontal
+            const containerElement = document.getElementById('sequenceDiagram');
+            const maxContainerWidth = containerElement.offsetWidth - 40; // 40px para padding
+
+            const svg = d3.select('#sequenceDiagram')
+                .append('svg')
+                .attr('width', Math.max(totalWidth, maxContainerWidth))
+                .attr('height', totalHeight)
+                .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
+                .style('background', '#fafafa')
+                .style('border-radius', '8px')
+                .style('display', 'block')
+                .style('min-width', totalWidth + 'px')
+                .style('width', totalWidth + 'px');
+
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            // Crear tooltip
+            const tooltip = d3.select('body').append('div')
+                .attr('class', 'custom-tooltip')
+                .style('opacity', 0);
+
+            // Dibujar columnas de páginas (verticales que van hacia abajo)
+            filteredSequence.forEach((page, index) => {
+                const x = index * columnWidth + columnWidth / 2;
+
+                // Línea vertical de la página que cubre toda la altura
+                g.append('line')
+                    .attr('x1', x)
+                    .attr('x2', x)
+                    .attr('y1', 40)
+                    .attr('y2', totalHeight - margin.top - margin.bottom - 40)
+                    .style('stroke', '#6c757d')
+                    .style('stroke-width', 2)
+                    .style('stroke-dasharray', '8,4');
+
+                // Etiqueta de la página en la parte superior
+                g.append('rect')
+                    .attr('x', x - 45)
+                    .attr('y', 10)
+                    .attr('width', 90)
+                    .attr('height', 25)
+                    .attr('fill', 'white')
+                    .attr('stroke', '#6c757d')
+                    .attr('stroke-width', 2)
+                    .attr('rx', 4);
+
+                g.append('text')
+                    .attr('x', x)
+                    .attr('y', 28)
+                    .attr('fill', '#495057')
+                    .attr('font-size', '12px')
+                    .attr('font-weight', 'bold')
+                    .attr('text-anchor', 'middle')
+                    .text(page);
+            });
+
+            // Dibujar transiciones una debajo de otra (eje Y = tiempo)
+            // Filtrar solo las transiciones reales (no la primera carga)
+            const realTransitions = pageTransitions.filter(t => t.fromIndex !== -1);
+
+            realTransitions.forEach((transition, index) => {
+                const y = 50 + (index * stepHeight);
+
+                const fromX = transition.fromIndex * columnWidth + columnWidth / 2;
+                const toX = transition.toIndex * columnWidth + columnWidth / 2;
+
+                // Determinar si es un regreso (ida y vuelta)
+                const isReturn = transition.fromIndex > transition.toIndex;
+                const arrowColor = isReturn ? '#ffc107' : '#dc3545';
+                const strokeDash = isReturn ? '8,4' : 'none';
+
+                // Círculo en la página origen
+                g.append('circle')
+                    .attr('cx', fromX)
+                    .attr('cy', y)
+                    .attr('r', 8)
+                    .attr('fill', 'white')
+                    .attr('stroke', arrowColor)
+                    .attr('stroke-width', 2);
+
+                g.append('text')
+                    .attr('x', fromX)
+                    .attr('y', y + 4)
+                    .attr('fill', arrowColor)
+                    .attr('font-size', '10px')
+                    .attr('font-weight', 'bold')
+                    .attr('text-anchor', 'middle')
+                    .text(index + 1);
+
+                // Solo dibujar si hay transición real entre páginas diferentes
+                if (fromX !== toX) {
+                    // Línea recta horizontal hacia la otra página
+                    g.append('line')
+                        .attr('x1', fromX + (fromX < toX ? 8 : -8))
+                        .attr('x2', toX + (fromX < toX ? -8 : 8))
+                        .attr('y1', y)
+                        .attr('y2', y)
+                        .attr('stroke', arrowColor)
+                        .attr('stroke-width', 3)
+                        .attr('stroke-dasharray', strokeDash)
+                        .attr('marker-end', `url(#arrowhead-${isReturn ? 'return' : 'normal'})`)
+                        .style('cursor', 'pointer')
+                        .on('mouseover', function(event) {
+                            d3.select(this).attr('stroke-width', 4);
+
+                            const relativeTime = ((transition.time - sessionStart) / 1000).toFixed(2);
+                            const transitionType = isReturn ? '↩️ Return' : '➡️ Forward';
+
+                            const tooltipContent = `
+                                <div style="font-weight: bold; margin-bottom: 6px; color: ${arrowColor};">${transitionType}</div>
+                                <div style="margin-bottom: 3px;"><strong>From:</strong> ${transition.fromPage}</div>
+                                <div style="margin-bottom: 3px;"><strong>To:</strong> ${transition.toPage}</div>
+                                <div><strong>Time:</strong> ${relativeTime}s</div>
+                                <div><strong>Step:</strong> ${index + 1}</div>
+                            `;
+
+                            tooltip.transition()
+                                .duration(150)
+                                .style('opacity', 1);
+
+                            tooltip.html(tooltipContent)
+                                .style('left', (event.pageX + 15) + 'px')
+                                .style('top', (event.pageY - 10) + 'px');
+                        })
+                        .on('mouseout', function() {
+                            d3.select(this).attr('stroke-width', 3);
+                            tooltip.transition()
+                                .duration(150)
+                                .style('opacity', 0);
+                        });
+
+                    // Círculo en la página destino
+                    g.append('circle')
+                        .attr('cx', toX)
+                        .attr('cy', y)
+                        .attr('r', 8)
+                        .attr('fill', arrowColor)
+                        .attr('stroke', 'white')
+                        .attr('stroke-width', 2);
+                }
+
+                // Etiqueta de tiempo en el lado izquierdo
+                g.append('text')
+                    .attr('x', -10)
+                    .attr('y', y + 4)
+                    .attr('fill', '#6c757d')
+                    .attr('font-size', '10px')
+                    .attr('text-anchor', 'end')
+                    .text(((transition.time - sessionStart) / 1000).toFixed(1) + 's');
+            });
+
+
+            // Definir marcadores de flecha
+            const defs = svg.append('defs');
+
+            // Flecha normal (hacia adelante)
+            defs.append('marker')
+                .attr('id', 'arrowhead-normal')
+                .attr('viewBox', '0 0 10 10')
+                .attr('refX', 8)
+                .attr('refY', 3)
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('orient', 'auto')
+                .append('path')
+                .attr('d', 'M 0 0 L 10 3 L 0 6 Z')
+                .attr('fill', '#dc3545');
+
+            // Flecha de regreso
+            defs.append('marker')
+                .attr('id', 'arrowhead-return')
+                .attr('viewBox', '0 0 10 10')
+                .attr('refX', 8)
+                .attr('refY', 3)
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('orient', 'auto')
+                .append('path')
+                .attr('d', 'M 0 0 L 10 3 L 0 6 Z')
+                .attr('fill', '#ffc107');
+
+        }
+
         function createLegend(actions) {
             const legendContent = document.getElementById('legendContent');
             legendContent.innerHTML = '';
@@ -1187,6 +1524,7 @@
             document.getElementById('errorMessage').style.display = 'block';
             document.getElementById('sessionInfo').style.display = 'none';
             document.getElementById('timelineSection').style.display = 'none';
+            document.getElementById('sequenceSection').style.display = 'none';
             document.getElementById('legendBox').style.display = 'none';
             document.getElementById('actionsTable').style.display = 'none';
         }
@@ -1195,7 +1533,7 @@
         function updateTitle() {
             const isV2Mode = document.getElementById('modeSwitch').checked;
             const titleElement = document.querySelector('h1');
-            titleElement.textContent = isV2Mode ? 'V2 Session Timeline Visualizer' : 'V1 Session Timeline Visualizer';
+            titleElement.textContent = isV2Mode ? '🚀 V2 User Journey Analytics Dashboard' : '📈 V1 User Journey Analytics Dashboard';
         }
 
         // Flag to prevent infinite loops during auto-detection
