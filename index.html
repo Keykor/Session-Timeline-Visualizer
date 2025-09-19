@@ -49,114 +49,178 @@
         }
         .action-rect {
             cursor: pointer;
-            transition: opacity 0.2s;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
         }
         .action-rect:hover {
-            opacity: 0.8;
+            filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.3));
+            transform: translateY(-1px);
         }
-        .tooltip {
+        .page-transition-line {
+            stroke: #e74c3c;
+            stroke-width: 3;
+            stroke-dasharray: 5,5;
+            opacity: 0.8;
+            cursor: pointer;
+        }
+        .page-transition-line:hover {
+            stroke-width: 4;
+            opacity: 1;
+            stroke-dasharray: none;
+        }
+        .page-label {
+            font-size: 12px;
+            fill: #e74c3c;
+            font-weight: bold;
+            text-anchor: middle;
+            font-family: Arial, sans-serif;
+        }
+        .timeline-axis {
+            font-size: 12px;
+            fill: #555;
+            font-family: Arial, sans-serif;
+        }
+        .timeline-axis path,
+        .timeline-axis line {
+            stroke: #999;
+        }
+        .action-text {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            pointer-events: none;
+        }
+        .custom-tooltip {
             position: absolute;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             color: white;
             padding: 8px 12px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 12px;
+            font-family: Arial, sans-serif;
             pointer-events: none;
             z-index: 1000;
-            max-width: 250px;
-            word-wrap: break-word;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            max-width: 300px;
+            line-height: 1.4;
         }
-        .page-transition {
-            stroke: #ff6b6b;
-            stroke-width: 2;
-            opacity: 0.7;
-            pointer-events: none;
+        .custom-tooltip::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
         }
-        .legend {
+        .legend-box {
+            position: relative;
             margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            border: 1px solid #e9ecef;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        .legend h4 {
-            margin: 0 0 10px 0;
-            color: #333;
+        .legend-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            border-radius: 8px 8px 0 0;
             cursor: pointer;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+        }
+        .legend-header:hover {
+            background: #e9ecef;
         }
         .legend-toggle {
-            font-size: 12px;
+            font-size: 18px;
             color: #666;
+            transition: transform 0.3s ease;
+        }
+        .legend-toggle.collapsed {
+            transform: rotate(180deg);
         }
         .legend-content {
-            display: none;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 8px;
-        }
-        .legend-content.open {
+            padding: 20px;
             display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .legend-content.collapsed {
+            display: none;
         }
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: #f9f9f9;
+            font-size: 13px;
         }
         .legend-color {
             width: 20px;
             height: 16px;
-            border-radius: 3px;
-            border: 1px solid #ddd;
-        }
-        .legend-text {
-            font-size: 12px;
-            color: #555;
-        }
-        .file-input-container {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 2px dashed #dee2e6;
-            text-align: center;
-        }
-        .file-input-container:hover {
-            border-color: #adb5bd;
-            background: #e9ecef;
-        }
-        .file-input {
-            margin: 10px 0;
-        }
-        .file-input input[type="file"] {
-            padding: 8px 16px;
-            border: 1px solid #ced4da;
             border-radius: 4px;
-            background: white;
-            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.2);
+            flex-shrink: 0;
         }
-        .file-input input[type="file"]:hover {
-            border-color: #adb5bd;
+        .header-section {
+            margin-bottom: 20px;
         }
-        .header {
+        .title-and-selector {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 20px;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
         }
-        .header h1 {
-            margin: 0;
-            color: #333;
-            flex: 1;
-        }
-        .header-controls {
+        .title-with-switch {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 25px;
             flex-wrap: wrap;
+        }
+        .file-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .file-selector label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            margin-right: 8px;
+        }
+        .file-selector input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .file-selector button {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .file-selector button:hover {
+            background: #0056b3;
+        }
+        .mode-switch {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         .switch {
             position: relative;
@@ -176,7 +240,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background-color: #007bff;
             transition: .4s;
             border-radius: 34px;
         }
@@ -192,21 +256,64 @@
             border-radius: 50%;
         }
         input:checked + .slider {
-            background-color: #2196F3;
+            background-color: #28a745;
         }
         input:checked + .slider:before {
             transform: translateX(26px);
         }
-        .mode-label {
-            font-size: 14px;
-            color: #333;
+        .mode-labels {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             font-weight: 500;
+            font-size: 14px;
+        }
+        .mode-labels .v1 {
+            color: #007bff;
+        }
+        .mode-labels .v2 {
+            color: #28a745;
+        }
+        .session-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .session-info h3 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+        }
+        .actions-table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .actions-table th, .actions-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .actions-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .actions-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .action-color-indicator {
+            width: 20px;
+            height: 16px;
+            border-radius: 2px;
+            border: 1px solid rgba(0,0,0,0.2);
+            display: inline-block;
+            margin-right: 8px;
         }
         .error-message {
-            color: #dc3545;
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            padding: 12px;
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 10px;
             border-radius: 4px;
             margin: 10px 0;
         }
@@ -214,58 +321,82 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Session Timeline Visualizer</h1>
-            <div class="header-controls">
-                <div class="file-input">
+        <div class="header-section">
+            <div class="title-and-selector">
+                <div class="title-with-switch">
+                    <h1>V1 Session Timeline Visualizer</h1>
+                    <div class="mode-switch">
+                        <div class="mode-labels">
+                            <span class="v1">V1</span>
+                            <label class="switch">
+                                <input type="checkbox" id="modeSwitch">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="v2">V2</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="file-selector">
+                    <label for="fileInput">Load Session:</label>
                     <input type="file" id="fileInput" accept=".json" />
                 </div>
-                <div class="mode-label">V1</div>
-                <label class="switch">
-                    <input type="checkbox" id="modeSwitch">
-                    <span class="slider"></span>
-                </label>
-                <div class="mode-label">V2</div>
             </div>
         </div>
 
-        <div id="errorContainer"></div>
+        <div id="sessionInfo" class="session-info" style="display: none;">
+            <h3>Session Information</h3>
+            <div id="sessionDetails"></div>
+        </div>
 
         <div id="timelineSection" style="display: none;">
-            <h3 id="timelineTitle">Session Timeline</h3>
+            <h3>Timeline</h3>
             <div id="timeline"></div>
-            <div class="legend">
-                <h4 onclick="toggleLegend()">
-                    Legend
-                    <span class="legend-toggle" id="legendToggle">[+]</span>
-                </h4>
-                <div class="legend-content" id="legendContent">
-                    <!-- Legend items will be dynamically populated -->
-                </div>
+        </div>
+
+        <div id="legendBox" class="legend-box" style="display: none;">
+            <div class="legend-header" onclick="toggleLegend()">
+                <span>Action Legend</span>
+                <span class="legend-toggle collapsed">▼</span>
+            </div>
+            <div id="legendContent" class="legend-content collapsed">
+                <!-- Dynamically filled -->
             </div>
         </div>
+
+        <div id="actionsTable" style="display: none;">
+            <h3>Action Details (times relative to session start)</h3>
+            <table class="actions-table">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Page</th>
+                        <th>Start (s)</th>
+                        <th>End (s)</th>
+                        <th>Duration (s)</th>
+                    </tr>
+                </thead>
+                <tbody id="actionsTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
     </div>
 
     <script>
         // ===========================================
-        // GLOBAL VARIABLES
-        // ===========================================
-        let currentSessionData = null;
-        let tooltip;
-
-        // ===========================================
-        // V1 CONFIGURATION (Original multi-step flow)
+        // V1 CONFIGURATION (Original flow)
         // ===========================================
         const V1_ACTION_COLORS = {
             'View six movies and select one': '#FF6B6B',
             'Click next to radius theater map': '#4ECDC4',
             'View four distance filters and select one': '#45B7D1',
             'View six movie theaters and select one': '#96CEB4',
-            'Click back to movies': '#FECA57',
-            'Click next to date': '#FF9FF3',
-            'View six dates and select one': '#54A0FF',
-            'Click back to theater': '#5F27CD',
-            'Click next to show': '#00D2D3',
+            'Click back to movies': '#FFEAA7',
+            'Click next to date': '#DDA0DD',
+            'View six dates and select one': '#98D8C8',
+            'Click back to theater': '#F7DC6F',
+            'Click next to show': '#BB8FCE',
             'View four times and select one': '#85C1E9',
             'Click back to date': '#F8C471',
             'Click next to seat selection': '#82E0AA',
@@ -372,7 +503,7 @@
                     const clickTime = parseTime(click.time);
                     const trackId = click.trackId ? click.trackId.toLowerCase() : null;
 
-                    if (click.element == 'LI') {
+                    if (click.element === 'LI') {
                         state.last_distance_click = clickTime;
                         continue;
                     }
@@ -380,7 +511,7 @@
                     if (!trackId) continue;
 
                     const [thing, value] = trackId.split('=');
-                    const cleanValue = value ? value.replace(/"/g, '') : '';
+                    const cleanValue = value.replace(/"/g, '');
 
                     if (thing === 'button') {
                         if (cleanValue === 'next') {
@@ -396,7 +527,7 @@
                         state.last_theatre_click = clickTime;
                     } else if (thing === 'show-time') {
                         state.last_show_click = clickTime;
-                    } else if (thing == 'seat') {
+                    } else if (thing === 'seat') {
                         state.last_seat_click = clickTime;
                     }
                 }
@@ -620,260 +751,495 @@
             const hasV1Page = sessionData.pages.some(page => page.page.startsWith('/v1'));
             const hasV2Page = sessionData.pages.some(page => page.page.startsWith('/v2'));
 
-            if (hasV2Page) return 'v2';
-            if (hasV1Page) return 'v1';
-            return null;
-        }
-
-        // ===========================================
-        // UI FUNCTIONS
-        // ===========================================
-        function showError(message) {
-            const errorContainer = document.getElementById('errorContainer');
-            errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
-            document.getElementById('timelineSection').style.display = 'none';
-        }
-
-        function hideError() {
-            document.getElementById('errorContainer').innerHTML = '';
-        }
-
-        function toggleLegend() {
-            const content = document.getElementById('legendContent');
-            const toggle = document.getElementById('legendToggle');
-
-            if (content.classList.contains('open')) {
-                content.classList.remove('open');
-                toggle.textContent = '[+]';
-            } else {
-                content.classList.add('open');
-                toggle.textContent = '[-]';
+            if (hasV2Page && !hasV1Page) {
+                return 'v2';
+            } else if (hasV1Page && !hasV2Page) {
+                return 'v1';
+            } else if (hasV1Page && hasV2Page) {
+                // If both exist, prefer the one with more pages
+                const v1Pages = sessionData.pages.filter(page => page.page.startsWith('/v1')).length;
+                const v2Pages = sessionData.pages.filter(page => page.page.startsWith('/v2')).length;
+                return v2Pages > v1Pages ? 'v2' : 'v1';
             }
+
+            return null; // Neither found
         }
 
-        function updateLegend() {
-            const legendContent = document.getElementById('legendContent');
-            const colors = getCurrentActionColors();
+        function visualizeSession(sessionData) {
+            try {
+                // Auto-detect session type and adjust switch
+                const detectedType = detectSessionType(sessionData);
+                const modeSwitch = document.getElementById('modeSwitch');
 
-            legendContent.innerHTML = '';
+                if (detectedType === 'v2' && !modeSwitch.checked) {
+                    isAutoAdjusting = true;
+                    modeSwitch.checked = true;
+                    updateTitle();
+                    isAutoAdjusting = false;
+                } else if (detectedType === 'v1' && modeSwitch.checked) {
+                    isAutoAdjusting = true;
+                    modeSwitch.checked = false;
+                    updateTitle();
+                    isAutoAdjusting = false;
+                }
 
-            Object.entries(colors).forEach(([action, color]) => {
-                const item = document.createElement('div');
-                item.className = 'legend-item';
-                item.innerHTML = `
-                    <div class="legend-color" style="background-color: ${color}"></div>
-                    <div class="legend-text">${action}</div>
+                const result = calculateActionTimesForVisualization(sessionData);
+                const { actions, pageTransitions, sessionStart, sessionEnd, sessionDuration } = result;
+
+                document.getElementById('sessionInfo').style.display = 'block';
+                document.getElementById('timelineSection').style.display = 'block';
+                document.getElementById('legendBox').style.display = 'block';
+                document.getElementById('actionsTable').style.display = 'block';
+                document.getElementById('errorMessage').style.display = 'none';
+
+                // Mostrar información de la sesión
+                const sessionDetails = document.getElementById('sessionDetails');
+                const durationSeconds = (sessionDuration / 1000).toFixed(2);
+                sessionDetails.innerHTML = `
+                    <p><strong>UUID:</strong> ${sessionData.uuid || 'N/A'}</p>
+                    <p><strong>Version:</strong> ${sessionData.version || 'N/A'}</p>
+                    <p><strong>Total duration:</strong> ${durationSeconds} seconds</p>
+                    <p><strong>Actions found:</strong> ${actions.length}</p>
                 `;
-                legendContent.appendChild(item);
-            });
+
+                // Crear timeline con D3.js
+                createD3Timeline(actions, sessionStart, sessionEnd, sessionDuration);
+                createLegend(actions);
+                createActionsTable(actions, sessionStart);
+
+            } catch (error) {
+                showError(error.message);
+            }
         }
 
-        // ===========================================
-        // VISUALIZATION FUNCTIONS
-        // ===========================================
-        function createVisualization(data) {
-            const timelineDiv = d3.select('#timeline');
-            timelineDiv.selectAll('*').remove();
+        function createD3Timeline(actions, sessionStart, sessionEnd, sessionDuration) {
+            // Limpiar timeline anterior y tooltips existentes
+            d3.select('#timeline').selectAll('*').remove();
+            d3.selectAll('.custom-tooltip').remove();
 
-            if (!tooltip) {
-                tooltip = d3.select('body').append('div')
-                    .attr('class', 'tooltip')
-                    .style('opacity', 0);
-            }
+            // Calcular ancho mínimo basado en duración de sesión
+            const minPixelsPerSecond = 20; // píxeles por segundo mínimo para buena legibilidad
+            const sessionDurationSeconds = sessionDuration / 1000;
+            const minRequiredWidth = sessionDurationSeconds * minPixelsPerSecond;
 
-            const margin = { top: 40, right: 50, bottom: 60, left: 100 };
-            const height = 300;
+            const containerMaxWidth = window.innerWidth - 100;
+            const margin = { top: 80, right: 50, bottom: 80, left: 50 };
 
-            const sessionDuration = data.sessionEnd - data.sessionStart;
-            const pixelsPerSecond = Math.max(0.5, sessionDuration / 1000 / 500); // Minimum 0.5px per second
-            const width = Math.max(800, sessionDuration / 1000 * pixelsPerSecond);
+            // Usar el mayor entre el ancho mínimo requerido y el ancho disponible
+            const totalWidth = Math.max(minRequiredWidth + margin.left + margin.right, containerMaxWidth);
+            const width = totalWidth - margin.left - margin.right;
+            const height = 400 - margin.top - margin.bottom;
 
-            const svg = timelineDiv.append('svg')
-                .attr('width', width + margin.left + margin.right)
-                .attr('height', height + margin.top + margin.bottom);
+            const svg = d3.select('#timeline')
+                .append('svg')
+                .attr('width', totalWidth)
+                .attr('height', height + margin.top + margin.bottom)
+                .style('background', '#fafafa')
+                .style('border-radius', '8px')
+                .style('min-width', totalWidth + 'px');
 
             const g = svg.append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
-            // Create scales
+            // Crear tooltip personalizado
+            const tooltip = d3.select('body').append('div')
+                .attr('class', 'custom-tooltip')
+                .style('opacity', 0);
+
+            // Escala de tiempo
             const xScale = d3.scaleLinear()
-                .domain([data.sessionStart, data.sessionEnd])
+                .domain([0, sessionDuration / 1000])
                 .range([0, width]);
 
-            const yScale = d3.scaleBand()
-                .domain(data.actions.map(d => d.name))
-                .range([0, height - margin.bottom])
-                .padding(0.1);
+            // Eje X
+            const xAxis = d3.axisBottom(xScale)
+                .tickFormat(d => `${d}s`)
+                .ticks(Math.min(10, Math.floor(sessionDuration / 5000)));
 
-            // Add X axis
             g.append('g')
-                .attr('transform', `translate(0,${height - margin.bottom})`)
-                .call(d3.axisBottom(xScale)
-                    .tickFormat(d => {
-                        const seconds = Math.round((d - data.sessionStart) / 1000);
-                        return `${seconds}s`;
-                    }));
+                .attr('transform', `translate(0,${height - 10})`)
+                .call(xAxis)
+                .selectAll('text')
+                .attr('class', 'timeline-axis');
 
-            // Add Y axis
+            // Grilla de fondo
+            const xGrid = d3.axisBottom(xScale)
+                .tickSize(-height + 20)
+                .tickFormat('')
+                .ticks(Math.min(10, Math.floor(sessionDuration / 5000)));
+
             g.append('g')
-                .call(d3.axisLeft(yScale));
+                .attr('class', 'grid')
+                .attr('transform', `translate(0,${height - 10})`)
+                .call(xGrid)
+                .selectAll('line')
+                .style('stroke', '#e0e0e0')
+                .style('stroke-width', 1);
 
-            // Add session background
-            g.append('rect')
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr('width', width)
-                .attr('height', height - margin.bottom)
-                .attr('fill', '#f8f9fa')
-                .attr('stroke', '#dee2e6')
-                .attr('opacity', 0.3);
+            // Crear secuencia de visitas por continuidad temporal, no solo por ID de página
+            const pageVisits = [];
+            let currentPage = null;
+            let currentVisit = null;
 
-            // Group page transitions by temporal continuity
-            const pageGroups = [];
-            let currentGroup = null;
-            const timeThreshold = 1000; // 1 second
+            // Ordenar acciones por tiempo
+            const sortedActions = [...actions].sort((a, b) => a.startTime - b.startTime);
 
-            data.pageTransitions.forEach(transition => {
-                if (!currentGroup ||
-                    transition.time - currentGroup.endTime > timeThreshold ||
-                    transition.page !== currentGroup.page) {
-                    currentGroup = {
-                        page: transition.page,
-                        startTime: transition.time,
-                        endTime: transition.time
+            sortedActions.forEach(action => {
+                if (action.page !== currentPage) {
+                    // Nueva visita a una página
+                    if (currentVisit) {
+                        pageVisits.push(currentVisit);
+                    }
+                    currentPage = action.page;
+                    currentVisit = {
+                        page: action.page,
+                        startTime: action.startTime,
+                        endTime: action.endTime,
+                        actions: [action]
                     };
-                    pageGroups.push(currentGroup);
                 } else {
-                    currentGroup.endTime = transition.time;
+                    // Continúa en la misma página
+                    currentVisit.endTime = Math.max(currentVisit.endTime, action.endTime);
+                    currentVisit.actions.push(action);
                 }
             });
 
-            // Add page transition lines
-            pageGroups.forEach(group => {
-                const x = xScale(group.startTime);
+            if (currentVisit) {
+                pageVisits.push(currentVisit);
+            }
 
-                g.append('line')
-                    .attr('class', 'page-transition')
-                    .attr('x1', x)
-                    .attr('y1', 0)
-                    .attr('x2', x)
-                    .attr('y2', height - margin.bottom)
-                    .style('pointer-events', 'all')
-                    .style('cursor', 'pointer')
+            // Líneas de transición entre visitas (movibles)
+            pageVisits.forEach((visit, visitIndex) => {
+                if (visitIndex > 0) {
+                    const relativeStart = (visit.startTime - sessionStart) / 1000;
+
+                    const transitionGroup = g.append('g')
+                        .attr('class', 'page-transition-group');
+
+                    const line = transitionGroup.append('line')
+                        .attr('class', 'page-transition-line')
+                        .attr('x1', xScale(relativeStart))
+                        .attr('x2', xScale(relativeStart))
+                        .attr('y1', 20)
+                        .attr('y2', height - 40)
+                        .on('mouseover', function(event) {
+                            const visitDuration = ((visit.endTime - visit.startTime) / 1000).toFixed(2);
+                            const actionsInVisit = visit.actions.length;
+                            const actionsList = visit.actions.map(a => `• ${a.name}`).join('\n');
+
+                            const tooltipContent = `
+                                <div style="font-weight: bold; margin-bottom: 8px; color: #e74c3c;">📄 ${visit.page}</div>
+                                <div style="margin-bottom: 5px;"><strong>Start:</strong> ${relativeStart.toFixed(2)}s</div>
+                                <div style="margin-bottom: 5px;"><strong>Duration:</strong> ${visitDuration}s</div>
+                                <div style="margin-bottom: 8px;"><strong>Actions:</strong> ${actionsInVisit}</div>
+                                <div style="font-size: 11px; color: #ccc; border-top: 1px solid #444; padding-top: 8px;">
+                                    ${actionsList}
+                                </div>
+                            `;
+
+                            tooltip.transition()
+                                .duration(200)
+                                .style('opacity', 1);
+
+                            tooltip.html(tooltipContent)
+                                .style('left', (event.pageX + 10) + 'px')
+                                .style('top', (event.pageY - 10) + 'px');
+                        })
+                        .on('mousemove', function(event) {
+                            tooltip
+                                .style('left', (event.pageX + 10) + 'px')
+                                .style('top', (event.pageY - 10) + 'px');
+                        })
+                        .on('mouseout', function() {
+                            tooltip.transition()
+                                .duration(200)
+                                .style('opacity', 0);
+                        });
+
+                    transitionGroup.append('rect')
+                        .attr('class', 'page-label-bg')
+                        .attr('x', xScale(relativeStart) - 25)
+                        .attr('y', 0)
+                        .attr('width', 50)
+                        .attr('height', 18)
+                        .attr('fill', 'white')
+                        .attr('stroke', '#e74c3c')
+                        .attr('stroke-width', 1)
+                        .attr('rx', 4)
+                        .style('cursor', 'pointer')
+                        .on('mouseover', function(event) {
+                            const visitDuration = ((visit.endTime - visit.startTime) / 1000).toFixed(2);
+                            const actionsInVisit = visit.actions.length;
+                            const actionsList = visit.actions.map(a => `• ${a.name}`).join('\n');
+
+                            const tooltipContent = `
+                                <div style="font-weight: bold; margin-bottom: 8px; color: #e74c3c;">📄 ${visit.page}</div>
+                                <div style="margin-bottom: 5px;"><strong>Start:</strong> ${relativeStart.toFixed(2)}s</div>
+                                <div style="margin-bottom: 5px;"><strong>Duration:</strong> ${visitDuration}s</div>
+                                <div style="margin-bottom: 8px;"><strong>Actions:</strong> ${actionsInVisit}</div>
+                                <div style="font-size: 11px; color: #ccc; border-top: 1px solid #444; padding-top: 8px;">
+                                    ${actionsList}
+                                </div>
+                            `;
+
+                            tooltip.transition()
+                                .duration(200)
+                                .style('opacity', 1);
+
+                            tooltip.html(tooltipContent)
+                                .style('left', (event.pageX + 10) + 'px')
+                                .style('top', (event.pageY - 10) + 'px');
+                        })
+                        .on('mousemove', function(event) {
+                            tooltip
+                                .style('left', (event.pageX + 10) + 'px')
+                                .style('top', (event.pageY - 10) + 'px');
+                        })
+                        .on('mouseout', function() {
+                            tooltip.transition()
+                                .duration(200)
+                                .style('opacity', 0);
+                        });
+
+                    transitionGroup.append('text')
+                        .attr('class', 'page-label')
+                        .attr('x', xScale(relativeStart))
+                        .attr('y', 12)
+                        .text(visit.page)
+                        .style('cursor', 'pointer')
+                        .on('mouseover', function(event) {
+                            const visitDuration = ((visit.endTime - visit.startTime) / 1000).toFixed(2);
+                            const actionsInVisit = visit.actions.length;
+                            const actionsList = visit.actions.map(a => `• ${a.name}`).join('\n');
+
+                            const tooltipContent = `
+                                <div style="font-weight: bold; margin-bottom: 8px; color: #e74c3c;">📄 ${visit.page}</div>
+                                <div style="margin-bottom: 5px;"><strong>Start:</strong> ${relativeStart.toFixed(2)}s</div>
+                                <div style="margin-bottom: 5px;"><strong>Duration:</strong> ${visitDuration}s</div>
+                                <div style="margin-bottom: 8px;"><strong>Actions:</strong> ${actionsInVisit}</div>
+                                <div style="font-size: 11px; color: #ccc; border-top: 1px solid #444; padding-top: 8px;">
+                                    ${actionsList}
+                                </div>
+                            `;
+
+                            tooltip.transition()
+                                .duration(200)
+                                .style('opacity', 1);
+
+                            tooltip.html(tooltipContent)
+                                .style('left', (event.pageX + 10) + 'px')
+                                .style('top', (event.pageY - 10) + 'px');
+                        })
+                        .on('mousemove', function(event) {
+                            tooltip
+                                .style('left', (event.pageX + 10) + 'px')
+                                .style('top', (event.pageY - 10) + 'px');
+                        })
+                        .on('mouseout', function() {
+                            tooltip.transition()
+                                .duration(200)
+                                .style('opacity', 0);
+                        });
+                }
+            });
+
+            // Organizar acciones en una sola línea temporal sin carriles de páginas
+            const actionHeight = 30;
+            const timelineY = height / 2 - actionHeight / 2;
+
+            actions.forEach((action, index) => {
+                const relativeStart = (action.startTime - sessionStart) / 1000;
+                const duration = action.duration / 1000;
+
+                // Calcular offset vertical para evitar superposiciones
+                const overlapOffset = (index % 3) * 35 - 35; // -35, 0, 35
+                const y = timelineY + overlapOffset;
+
+                const actionGroup = g.append('g')
+                    .attr('class', 'action-group');
+
+                // Sombra del rectángulo
+                actionGroup.append('rect')
+                    .attr('x', xScale(relativeStart) + 2)
+                    .attr('y', y + 2)
+                    .attr('width', Math.max(xScale(duration), 30))
+                    .attr('height', actionHeight)
+                    .attr('fill', 'rgba(0,0,0,0.15)')
+                    .attr('rx', 6);
+
+                // Rectángulo principal
+                actionGroup.append('rect')
+                    .attr('class', 'action-rect')
+                    .attr('x', xScale(relativeStart))
+                    .attr('y', y)
+                    .attr('width', Math.max(xScale(duration), 30))
+                    .attr('height', actionHeight)
+                    .attr('fill', getCurrentActionColors()[action.name] || '#999')
+                    .attr('stroke', 'white')
+                    .attr('stroke-width', 2)
+                    .attr('rx', 6)
                     .on('mouseover', function(event) {
-                        const startSeconds = Math.round((group.startTime - data.sessionStart) / 1000);
+                        const tooltipContent = `
+                            <div style="font-weight: bold; margin-bottom: 5px;">${action.name}</div>
+                            <div>Start: ${relativeStart.toFixed(2)}s</div>
+                            <div>End: ${(relativeStart + duration).toFixed(2)}s</div>
+                            <div>Duration: ${duration.toFixed(2)}s</div>
+                            <div style="margin-top: 5px; color: #ccc;">Page: ${action.page}</div>
+                        `;
+
                         tooltip.transition()
                             .duration(200)
-                            .style('opacity', .9);
-                        tooltip.html(`
-                            <strong>Page:</strong> ${group.page}<br>
-                            <strong>Time:</strong> ${startSeconds}s<br>
-                            <strong>Timestamp:</strong> ${new Date(group.startTime).toLocaleTimeString()}
-                        `)
+                            .style('opacity', 1);
+
+                        tooltip.html(tooltipContent)
                             .style('left', (event.pageX + 10) + 'px')
-                            .style('top', (event.pageY - 28) + 'px');
+                            .style('top', (event.pageY - 10) + 'px');
+                    })
+                    .on('mousemove', function(event) {
+                        tooltip
+                            .style('left', (event.pageX + 10) + 'px')
+                            .style('top', (event.pageY - 10) + 'px');
                     })
                     .on('mouseout', function() {
                         tooltip.transition()
-                            .duration(500)
+                            .duration(200)
                             .style('opacity', 0);
                     });
+
+                // Texto de la acción
+                const textWidth = Math.max(xScale(duration), 30);
+                const maxChars = Math.floor(textWidth / 7);
+                const text = action.name.length > maxChars ? action.name.substring(0, maxChars - 3) + '...' : action.name;
+
+                actionGroup.append('text')
+                    .attr('class', 'action-text')
+                    .attr('x', xScale(relativeStart) + textWidth / 2)
+                    .attr('y', y + actionHeight / 2 + 4)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', 'white')
+                    .style('text-shadow', '1px 1px 2px rgba(0,0,0,0.8)')
+                    .text(text);
+
+                // No necesitamos más el tooltip SVG ya que usamos uno personalizado
             });
-
-            // Add action rectangles
-            const colors = getCurrentActionColors();
-
-            g.selectAll('.action-rect')
-                .data(data.actions)
-                .enter()
-                .append('rect')
-                .attr('class', 'action-rect')
-                .attr('x', d => xScale(d.startTime))
-                .attr('y', d => yScale(d.name))
-                .attr('width', d => Math.max(2, xScale(d.endTime) - xScale(d.startTime)))
-                .attr('height', yScale.bandwidth())
-                .attr('fill', d => colors[d.name] || '#999')
-                .attr('stroke', '#fff')
-                .attr('stroke-width', 1)
-                .on('mouseover', function(event, d) {
-                    const startSeconds = Math.round((d.startTime - data.sessionStart) / 1000);
-                    const endSeconds = Math.round((d.endTime - data.sessionStart) / 1000);
-                    const durationSeconds = Math.round(d.duration / 1000);
-
-                    tooltip.transition()
-                        .duration(200)
-                        .style('opacity', .9);
-                    tooltip.html(`
-                        <strong>Action:</strong> ${d.name}<br>
-                        <strong>Page:</strong> ${d.page}<br>
-                        <strong>Duration:</strong> ${durationSeconds}s<br>
-                        <strong>Start:</strong> ${startSeconds}s<br>
-                        <strong>End:</strong> ${endSeconds}s
-                    `)
-                        .style('left', (event.pageX + 10) + 'px')
-                        .style('top', (event.pageY - 28) + 'px');
-                })
-                .on('mouseout', function() {
-                    tooltip.transition()
-                        .duration(500)
-                        .style('opacity', 0);
-                });
-
-            // Add timeline title with session info
-            const totalSeconds = Math.round(data.sessionDuration / 1000);
-            document.getElementById('timelineTitle').textContent =
-                `Session Timeline - Duration: ${totalSeconds}s (${data.actions.length} actions)`;
         }
 
-        // ===========================================
-        // EVENT HANDLERS
-        // ===========================================
+        function createLegend(actions) {
+            const legendContent = document.getElementById('legendContent');
+            legendContent.innerHTML = '';
+
+            // Obtener acciones únicas
+            const uniqueActions = [...new Set(actions.map(action => action.name))];
+
+            uniqueActions.forEach(actionName => {
+                const legendItem = document.createElement('div');
+                legendItem.className = 'legend-item';
+
+                const colorBox = document.createElement('div');
+                colorBox.className = 'legend-color';
+                colorBox.style.backgroundColor = getCurrentActionColors()[actionName] || '#999';
+
+                const label = document.createElement('span');
+                label.textContent = actionName;
+
+                legendItem.appendChild(colorBox);
+                legendItem.appendChild(label);
+                legendContent.appendChild(legendItem);
+            });
+        }
+
+        function toggleLegend() {
+            const content = document.getElementById('legendContent');
+            const toggle = document.querySelector('.legend-toggle');
+
+            content.classList.toggle('collapsed');
+            toggle.classList.toggle('collapsed');
+        }
+
+        function createActionsTable(actions, sessionStart) {
+            const tableBody = document.getElementById('actionsTableBody');
+            tableBody.innerHTML = '';
+
+            actions.forEach(action => {
+                const row = document.createElement('tr');
+
+                const relativeStart = ((action.startTime - sessionStart) / 1000).toFixed(2);
+                const relativeEnd = ((action.endTime - sessionStart) / 1000).toFixed(2);
+                const duration = (action.duration / 1000).toFixed(2);
+
+                row.innerHTML = `
+                    <td>
+                        <span class="action-color-indicator" style="background-color: ${getCurrentActionColors()[action.name] || '#999'}"></span>
+                        ${action.name}
+                    </td>
+                    <td>${action.page}</td>
+                    <td>${relativeStart}</td>
+                    <td>${relativeEnd}</td>
+                    <td>${duration}</td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('sessionInfo').style.display = 'none';
+            document.getElementById('timelineSection').style.display = 'none';
+            document.getElementById('legendBox').style.display = 'none';
+            document.getElementById('actionsTable').style.display = 'none';
+        }
+
+        // Update title based on mode
+        function updateTitle() {
+            const isV2Mode = document.getElementById('modeSwitch').checked;
+            const titleElement = document.querySelector('h1');
+            titleElement.textContent = isV2Mode ? 'V2 Session Timeline Visualizer' : 'V1 Session Timeline Visualizer';
+        }
+
+        // Flag to prevent infinite loops during auto-detection
+        let isAutoAdjusting = false;
+
+        // Mode switch event listener
+        document.getElementById('modeSwitch').addEventListener('change', function() {
+            updateTitle();
+
+            // Only re-process if this is a user-initiated change, not auto-adjustment
+            if (!isAutoAdjusting) {
+                // Re-process current file if there's one loaded (works for both V1→V2 and V2→V1)
+                const fileInput = document.getElementById('fileInput');
+                if (fileInput.files && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const sessionData = JSON.parse(e.target.result);
+                            visualizeSession(sessionData);
+                        } catch (error) {
+                            showError('Error parsing JSON file: ' + error.message);
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            }
+        });
+
         document.getElementById('fileInput').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            hideError();
-
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    currentSessionData = JSON.parse(e.target.result);
-
-                    // Auto-detect session type and update switch
-                    const sessionType = detectSessionType(currentSessionData);
-                    if (sessionType) {
-                        document.getElementById('modeSwitch').checked = sessionType === 'v2';
-                    }
-
-                    processAndVisualize();
+                    const sessionData = JSON.parse(e.target.result);
+                    visualizeSession(sessionData);
                 } catch (error) {
                     showError('Error parsing JSON file: ' + error.message);
                 }
             };
             reader.readAsText(file);
         });
-
-        document.getElementById('modeSwitch').addEventListener('change', function() {
-            if (currentSessionData) {
-                processAndVisualize();
-            }
-        });
-
-        function processAndVisualize() {
-            if (!currentSessionData) return;
-
-            try {
-                const data = calculateActionTimesForVisualization(currentSessionData);
-                updateLegend();
-                createVisualization(data);
-                document.getElementById('timelineSection').style.display = 'block';
-            } catch (error) {
-                showError(error.message);
-            }
-        }
-
-        // Initialize legend as closed
-        updateLegend();
     </script>
 </body>
 </html>
